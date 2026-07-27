@@ -12,3 +12,13 @@ __pycache__/
 # IDE
 .vscode/
 .idea/
+
+# Environment variables
+.env
+
+# Python cache
+.pytest_cache/
+
+scripts/
+
+sample_documents/
