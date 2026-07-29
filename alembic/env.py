@@ -10,6 +10,7 @@ from app.DBModels.base import Base
 # Import models so they register with Base.metadata
 from app.DBModels.document import Document
 from app.DBModels.page import Page
+from app.DBModels.document_type import DocumentType
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

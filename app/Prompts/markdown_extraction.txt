@@ -1,0 +1,12 @@
+"""
+                        Convert this document page into Markdown.
+
+                        Requirements:
+                        - Preserve headings.
+                        - Preserve tables using Markdown table syntax.
+                        - Preserve bullet lists.
+                        - Preserve reading order.
+                        - Do not summarize.
+                        - Do not explain.
+                        - Return only the Markdown.
+                        """
