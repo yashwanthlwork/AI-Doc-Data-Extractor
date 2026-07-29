@@ -20,7 +20,7 @@ def root():
 async def upload_file(file: UploadFile = File(...)):
     pdf_bytes=await file.read()
     documentservice=DocumentService()
-    documentservice.process_document(file.filename,pdf_bytes)
+    documentservice.upload_document(file.filename,pdf_bytes)
     return{
         "filename":file.filename,
         "Content-type":file.content_type
