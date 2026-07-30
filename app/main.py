@@ -1,6 +1,8 @@
-from fastapi import FastAPI,UploadFile,File
+from fastapi import FastAPI,UploadFile,File,HTTPException
 from app.Services.documentservice import DocumentService
 from app.Services.pageservice import PageService
+from app.Services.documenttypeservice import DocumentTypeService
+from app.Services.documentclassificationservice import DocumentClassificationService
 
 app=FastAPI(
     title="Inteligence Document Processing",
@@ -47,3 +49,29 @@ def extract_markdown(document_id: str):
             "document_id": document_id,
             "status": "MARKDOWN_EXTRACTED"
         }
+
+@app.post("/document-types")
+
+def create_document_type(document_type_name:str,document_type_description:str):
+    service=DocumentTypeService()
+    try:
+        return service.create_document_type(
+            document_type_name,
+            document_type_description
+        )
+    except ValueError as ex:
+        raise HTTPException(
+            status_code=400,
+            detail=str(ex)
+        )
+    
+@app.get("/document-types")
+def get_all_document_types():
+    service=DocumentTypeService()
+    return service.get_all_document_types()
+
+@app.post("/classify-document")
+def classify_document(document_id:str):
+    service=DocumentClassificationService()
+    return service.classify_document(document_id)
+

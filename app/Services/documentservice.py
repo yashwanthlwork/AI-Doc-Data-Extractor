@@ -45,4 +45,21 @@ class DocumentService:
 
         finally:
             session.close()
+
+    def update_document_type(self,document_id:str,document_type_id:str):
+        session = SessionLocal()
+        try:
+            document=session.scalar(
+                select(Document).where(Document.document_id==document_id)
+            )
+            document.document_type_id=document_type_id
+            session.commit()
+            session.refresh()
+        except Exception:
+            session.rollback()
+            raise
+        finally:
+            session.close()
+        return document
+
             

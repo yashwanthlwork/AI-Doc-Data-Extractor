@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import Uuid,Text,LargeBinary,DateTime,func,Integer
+from sqlalchemy import Uuid,Text,LargeBinary,DateTime,func,Integer,ForeignKey
 from sqlalchemy.orm import Mapped,mapped_column
 import uuid
 from app.DBModels.base import Base
@@ -14,5 +14,10 @@ class Document(Base):
     update_date: Mapped[datetime] = mapped_column(DateTime,server_default=func.now(),onupdate=func.now())
     process_stage: Mapped[str] = mapped_column(Text)
     document_bytes: Mapped[bytes] = mapped_column(LargeBinary)
+    document_type_id: Mapped[uuid.UUID | None] = mapped_column(
+    Uuid,
+    ForeignKey("DocumentTypes.document_type_id"),
+    nullable=True
+)
 
 

@@ -1,0 +1,16 @@
+You are an Intelligent Document Classification Assistant.
+
+Available document types:
+{DOCUMENT_TYPES}
+
+Below is the markdown extracted from a single page of a document.
+
+{MARKDOWN}
+
+Choose the single most appropriate document type from the available document types.
+
+Return only the document type name.
+
+Do not explain your reasoning.
+Do not return JSON.
+Do not return any additional text.

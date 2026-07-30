@@ -12,7 +12,7 @@ class DocumentType(Base):
     primary_key=True,
     server_default=text("gen_random_uuid()"))
     document_type_name:Mapped[str]=mapped_column(Text,unique=True)
-    description: Mapped[str | None] = mapped_column(Text, nullable=True)
+    description: Mapped[str] = mapped_column(Text)
     create_date: Mapped[datetime] = mapped_column(DateTime,server_default=func.now())
     update_date: Mapped[datetime] = mapped_column(DateTime,server_default=func.now(),onupdate=func.now())
 
