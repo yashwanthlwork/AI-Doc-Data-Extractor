@@ -3,12 +3,11 @@ import uuid
 from sqlalchemy import Uuid, LargeBinary, Text, DateTime, func,Integer,ForeignKey
 from datetime import datetime
 from app.DBModels.base import Base
-from app.DBModels.document import Document
 
 class Page(Base):
     __tablename__="Pages"
 
-    document_id: Mapped[uuid.UUID] = mapped_column(Uuid,ForeignKey(Document.document_id),primary_key=True)
+    document_id: Mapped[uuid.UUID] = mapped_column(Uuid,ForeignKey("Documents.document_id"),primary_key=True)
     page_number: Mapped[int] = mapped_column(Integer,primary_key=True)
     create_date: Mapped[datetime] = mapped_column(DateTime,server_default=func.now())
     update_date: Mapped[datetime] = mapped_column(DateTime,server_default=func.now(), onupdate=func.now())

@@ -2,7 +2,9 @@ from fastapi import FastAPI,UploadFile,File,HTTPException
 from app.Services.documentservice import DocumentService
 from app.Services.pageservice import PageService
 from app.Services.documenttypeservice import DocumentTypeService
+from app.Services.promptservice import PromptService
 from app.Services.documentclassificationservice import DocumentClassificationService
+from uuid import UUID
 
 app=FastAPI(
     title="Inteligence Document Processing",
@@ -72,6 +74,43 @@ def get_all_document_types():
 
 @app.post("/classify-document")
 def classify_document(document_id:str):
-    service=DocumentClassificationService()
-    return service.classify_document(document_id)
+    document_classification_service=DocumentClassificationService()
+    document_type = document_classification_service.classify_document(document_id)
 
+    return document_type
+
+@app.post("/prompts")
+def create_prompt(prompt_name:str,prompt:str,document_type_id):
+    promptservice=PromptService()
+    prompt_creation=promptservice.create_prompt(prompt_name,prompt,document_type_id)
+    return prompt_creation
+
+@app.get("/prompts")
+def fetch_all_prompts():
+    promptservice=PromptService()
+    all_prompt=promptservice.fetch_all_prompts()
+    return all_prompt
+
+@app.get("/prompts/{document_type_id}")
+def fetch_prompt_by_document_type_id(document_type_id:UUID):
+    promptservice=PromptService()
+    prompt=promptservice.fetch_prompt_by_document_type_id(document_type_id)
+    return prompt
+
+@app.get("/prompts/{prompt_id}")
+def fetch_prompt_by_prompt_id(prompt_id:UUID):
+    promptservice=PromptService()
+    prompt=promptservice.fetch_prompt_by_prompt_id(prompt_id)
+    return prompt
+
+@app.patch("/prompts")
+def update_prompt(prompt:str,prompt_id:UUID):
+    promptservice=PromptService()
+    prompt=promptservice.update_prompt(prompt,prompt_id)
+    return prompt
+
+@app.patch("/prompts")
+def update_prompt_document_type_id(document_type_id:UUID,prompt_id:UUID):
+    promptservice=PromptService()
+    prompt=promptservice.update_document_type_id(document_type_id,prompt_id)
+    return prompt

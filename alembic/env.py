@@ -11,6 +11,7 @@ from app.DBModels.base import Base
 from app.DBModels.document import Document
 from app.DBModels.page import Page
 from app.DBModels.document_type import DocumentType
+from app.DBModels.prompt import Prompt
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

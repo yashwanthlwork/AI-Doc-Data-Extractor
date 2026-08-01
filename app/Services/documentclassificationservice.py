@@ -83,6 +83,12 @@ class DocumentClassificationService:
             document.process_stage = "DOCUMENT_CLASSIFIED"
 
             session.commit()
+            return {
+                "document_id": str(document_id),
+                "document_type_id": str(document_type.document_type_id),
+                "document_type_name": document_type.document_type_name,
+                "process_stage": document.process_stage
+            }
 
         except Exception:
             session.rollback()

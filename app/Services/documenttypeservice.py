@@ -2,6 +2,7 @@ from app.Configuration.DBSession import SessionLocal
 from app.DBModels.document_type import DocumentType
 from sqlalchemy import select
 from sqlalchemy.orm import Session
+from uuid import UUID
 
 class DocumentTypeService:
     def create_document_type(self,document_type_name:str,document_type_description:str)-> DocumentType:
@@ -47,6 +48,12 @@ class DocumentTypeService:
         finally:
             session.close()
 
-        
-            
+    def check_document_type_id_exists(self, session:Session, document_type_id: UUID) -> bool:
+            document_type_exists = session.scalar(
+                select(DocumentType).where(
+                    DocumentType.document_type_id == document_type_id
+                )
+            )
+            return document_type_exists is not None    
+           
             
