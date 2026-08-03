@@ -1,12 +1,10 @@
-# Python AI Document Intelligence
+# AI-Document-Intelligence-API
 
-This is a project I started to better understand how Large Language Models (LLMs) can be used to automate document processing.
+This is an Intelligent Document Processing (IDP) backend project I built to understand how Large Language Models (LLMs) can be used to automate business document workflows.
 
-While working on enterprise applications, I realized that a lot of business processes still depend on manually reading PDF documents and entering the required information into another system. I wanted to understand how this entire process works, so I decided to build it myself from scratch.
+While working on enterprise applications, I realized that many business processes still depend on manually reading PDF documents and entering required details into other systems. I wanted to understand how this entire pipeline works under the hood, so I built this API from scratch.
 
-Instead of using a ready-made solution, I wanted to implement every major step involved in an Intelligent Document Processing (IDP) pipeline. This project gave me the opportunity to learn how different technologies work together—from handling PDF documents and databases to integrating AI models for document understanding and structured data extraction.
-
-The current implementation takes a PDF document, processes it step by step, identifies the document type, and extracts structured JSON data using configurable prompts.
+Instead of using a ready-made solution, I implemented every major step involved in an IDP pipeline—from PDF ingestion and page-by-page image rendering to vision-based markdown extraction, document classification, and prompt-driven structured data extraction using local LLMs.
 
 ---
 
@@ -18,11 +16,11 @@ Currently, the project can:
 - Store uploaded documents in PostgreSQL.
 - Split PDFs into individual pages.
 - Convert each page into a PNG image.
-- Generate markdown from page images using Ollama Vision.
+- Generate markdown from page images using Ollama Vision models.
 - Classify the document type using an LLM.
 - Maintain configurable document types.
-- Maintain configurable extraction prompts.
-- Extract structured JSON based on the classified document type.
+- Maintain customizable extraction prompts.
+- Dynamically extract structured JSON data based on user-defined prompts.
 - Store the extracted JSON in the database.
 
 ---
@@ -63,17 +61,15 @@ Store Extracted JSON
 
 # Technology Stack
 
-| Category | Technology |
-|----------|------------|
-| Language | Python 3 |
-| Framework | FastAPI |
-| Database | PostgreSQL |
-| ORM | SQLAlchemy |
-| Database Migration | Alembic |
-| PDF Processing | PyMuPDF |
-| AI Runtime | Ollama |
-| AI Model | Gemma 3 (4B) |
-| Data Format | JSON |
+Category	Technology
+Language	Python 3
+Framework	FastAPI
+Database	PostgreSQL
+ORM	SQLAlchemy
+Database Migration	Alembic
+PDF Processing	PyMuPDF
+AI Runtime	Ollama
+Data Format	JSON
 
 ---
 
