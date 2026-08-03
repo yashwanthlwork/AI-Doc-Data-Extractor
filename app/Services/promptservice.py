@@ -56,33 +56,29 @@ class PromptService:
         finally:
             session.close()
         
-    def fetch_prompt_by_prompt_id(self,prompt_id:UUID)->Prompt:
+    def fetch_prompt_by_prompt_id(self,session:Session,prompt_id:UUID)->Prompt:
         if not prompt_id:
             raise ValueError("Invalid Prompt ID.")
-        session:Session=SessionLocal()
-        try:
-            prompt_details=session.scalar(
-                select(Prompt).where(Prompt.prompt_id==prompt_id)
-            )
-            if not prompt_details:
-                raise ValueError("Given Prompt ID does not exist.")
-            return prompt_details
-        finally:
-            session.close()
+        
+        prompt_details=session.scalar(
+            select(Prompt).where(Prompt.prompt_id==prompt_id)
+        )
+        if not prompt_details:
+            raise ValueError("Given Prompt ID does not exist.")
+        return prompt_details
+        
 
-    def fetch_prompt_by_document_type_id(self,document_type_id:UUID)->Prompt:
+    def fetch_prompt_by_document_type_id(self,session:Session,document_type_id:UUID)->Prompt:
         if not document_type_id:
             raise ValueError("Invalid Document Type ID.")
-        session:Session=SessionLocal()
-        try:
-            prompt_details=session.scalar(
-                select(Prompt).where(Prompt.document_type_id==document_type_id)
-            )
-            if not prompt_details:
-                raise ValueError("No prompt configured for given Document Type ID.")
-            return prompt_details
-        finally:
-            session.close()
+        
+        prompt_details=session.scalar(
+            select(Prompt).where(Prompt.document_type_id==document_type_id)
+        )
+        if not prompt_details:
+            raise ValueError("No prompt configured for given Document Type ID.")
+        return prompt_details
+    
     
     def fetch_all_prompts(self)->list[Prompt]:
         session:Session = SessionLocal()

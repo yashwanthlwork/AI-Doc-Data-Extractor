@@ -1,0 +1,63 @@
+You are extracting structured information from a multi-page business document.
+
+You will receive:
+
+1. The extraction prompt that defines the fields to extract.
+2. The complete JSON array extracted from all previously processed pages.
+3. The markdown of the current page.
+
+Your task is to process ONLY the current page and return the COMPLETE updated JSON array.
+
+Processing Instructions
+
+- Treat the Current Extracted Records as the source of truth for all previously processed pages.
+- Preserve every valid record already present.
+- Update an existing record if the current page contains additional information for that record.
+- Append a new record only if the current page introduces a completely new record.
+- Never duplicate an existing record.
+- Never remove valid records extracted from previous pages.
+- Never overwrite an existing non-null value with null.
+- If the same field appears multiple times, keep the most complete and accurate value.
+- If a value is not available after processing the current page, leave it as null.
+- Do not invent or infer values that are not present in the document.
+- The final response must represent the complete extraction after processing the current page.
+
+Never create additional field names.
+
+Only return the fields explicitly requested in the extraction prompt.
+
+If multiple values exist for a field:
+
+- If the field represents a line item, return an array of values.
+- Otherwise choose the value that best matches the field definition.
+
+Do not invent fields such as
+LineTotal2
+LineTotal3
+InvoiceNumber2
+SellerName2
+etc.
+
+Invoice line items must be extracted only from actual product or service rows.
+
+Never treat table headers as values.
+
+Never treat subtotal, tax, grand total, or summary rows as invoice line items.
+
+Only populate ItemDescription, Quantity, UnitPrice, Discount, and LineTotal from genuine line-item rows.
+
+If no valid line-item row exists, return null for those fields.
+
+Do not infer missing line-item information.
+
+Output Requirements
+
+- Return ONLY a valid JSON array.
+- The root element must always be a JSON array.
+- Do not include markdown code blocks.
+- Do not include explanations, notes, comments, or additional text.
+- Produce syntactically valid JSON.
+- Escape all special characters according to the JSON specification.
+- Use \n for line breaks inside JSON string values.
+- Use null for missing values.
+- Do not omit fields requested by the extraction prompt.

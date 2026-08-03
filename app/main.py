@@ -4,12 +4,18 @@ from app.Services.pageservice import PageService
 from app.Services.documenttypeservice import DocumentTypeService
 from app.Services.promptservice import PromptService
 from app.Services.documentclassificationservice import DocumentClassificationService
+from app.Services.documentdataextractionservice import DocumentDataExtractionService
+
 from uuid import UUID
 
 app=FastAPI(
-    title="Inteligence Document Processing",
-    description="Extrcating required data from Documents Using LLM ",
-    version="0.0.1"
+    title="AI Document Intelligence API",
+    description="""
+An AI-powered backend application for processing PDF documents through
+document upload, page generation, markdown extraction, document
+classification, and structured data extraction.
+""",
+    version="1.0.0"
 )
 
 @app.get("/")
@@ -91,18 +97,6 @@ def fetch_all_prompts():
     all_prompt=promptservice.fetch_all_prompts()
     return all_prompt
 
-@app.get("/prompts/{document_type_id}")
-def fetch_prompt_by_document_type_id(document_type_id:UUID):
-    promptservice=PromptService()
-    prompt=promptservice.fetch_prompt_by_document_type_id(document_type_id)
-    return prompt
-
-@app.get("/prompts/{prompt_id}")
-def fetch_prompt_by_prompt_id(prompt_id:UUID):
-    promptservice=PromptService()
-    prompt=promptservice.fetch_prompt_by_prompt_id(prompt_id)
-    return prompt
-
 @app.patch("/prompts")
 def update_prompt(prompt:str,prompt_id:UUID):
     promptservice=PromptService()
@@ -114,3 +108,8 @@ def update_prompt_document_type_id(document_type_id:UUID,prompt_id:UUID):
     promptservice=PromptService()
     prompt=promptservice.update_document_type_id(document_type_id,prompt_id)
     return prompt
+
+@app.post("/documents/{document_id}/extract-data")
+def extract_data(document_id: UUID):
+    service = DocumentDataExtractionService()
+    return service.extract_data(document_id)

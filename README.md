@@ -257,7 +257,7 @@ The APIs below follow the normal document processing flow.
 
 **POST** `/upload`
 
-This is the first API in the pipeline.
+This is the starting point of the document processing pipeline.
 
 Upload a PDF document using `multipart/form-data`.
 
@@ -290,7 +290,7 @@ The returned **Document ID** is required for the remaining APIs.
 
 **POST** `/documents/{document_id}/create-pages`
 
-Once the document is uploaded, this endpoint converts the PDF into individual pages.
+Once the document is uploaded, This endpoint reads the uploaded PDF and creates one page record for every page in the document.
 
 ### What it does
 
@@ -501,11 +501,21 @@ I have documented the project in a few simple documents that explain the idea be
 
 # Current Status
 
-This project is still under active development.
+The core Intelligent Document Processing (IDP) pipeline has been implemented.
 
-At this stage, the document upload, page generation, markdown extraction, document classification, and prompt management features have been completed.
+The application currently supports:
 
-I'm currently working on the structured data extraction part of the pipeline, which will extract JSON from documents and store the results in the database.
+- Uploading PDF documents.
+- Splitting PDFs into individual pages.
+- Generating PNG images for each page.
+- Extracting markdown using Ollama Vision.
+- Managing document types.
+- Managing extraction prompts.
+- Classifying documents using AI.
+- Extracting structured JSON data using configurable prompts.
+- Storing the extracted JSON in PostgreSQL.
+
+The project will continue to evolve with additional document types, improved extraction quality, and further enhancements to the overall document processing workflow.
 
 ---
 

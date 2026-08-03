@@ -1,13 +1,15 @@
 from app.Configuration.DBSession import SessionLocal
 from sqlalchemy import select
+from sqlalchemy.orm import Session
 from app.DBModels.document import Document
 from app.DBModels.page import Page
 from app.Services.ollamaservice import OllamaService
 import pymupdf
+from uuid import UUID
 
 class PageService:
 
-    def upload_pages(self, document_id):
+    def upload_pages(self, document_id:UUID):
         session = SessionLocal()
 
         try:
@@ -50,7 +52,7 @@ class PageService:
             session.close()
             
 
-    def extract_markdown(self, document_id):
+    def extract_markdown(self, document_id:UUID):
         session = SessionLocal()
 
         try:
@@ -81,4 +83,14 @@ class PageService:
 
         finally:
             session.close()
-            
+
+    def fetch_pages_by_document_id(self,session:Session ,document_id:UUID):
+        pages = session.scalars(
+            select(Page)
+            .where(Page.document_id == document_id)
+            .order_by(Page.page_number)
+        ).all()
+
+        if not pages:
+            raise ValueError("No pages found for this document")
+        return pages
