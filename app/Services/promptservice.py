@@ -88,71 +88,66 @@ class PromptService:
                 ).all()
         finally:
             session.close()
+            
 
-    def update_prompt(self,prompt:str,prompt_id:UUID)->Prompt:
-        prompt=prompt.strip()
+    def update_prompt(self, prompt_id: UUID, prompt: str | None = None, document_type_id: UUID | None = None) -> Prompt:
 
         if not prompt_id:
             raise ValueError("Invalid Prompt ID.")
-        
-        if not prompt:
-            raise ValueError("Invalid Prompt.")
-        
-        session:Session=SessionLocal()
+
+        if prompt is None and document_type_id is None:
+            raise ValueError("No update data provided.")
+
+        session: Session = SessionLocal()
+
         try:
-            prompt_details=session.scalar(
-                select(Prompt).where(Prompt.prompt_id==prompt_id)
+            prompt_details = session.scalar(
+                select(Prompt).where(Prompt.prompt_id == prompt_id)
             )
+
             if not prompt_details:
                 raise ValueError("Given Prompt ID does not exist.")
-            prompt_details.prompt=prompt
+
+            if prompt is not None:
+                prompt = prompt.strip()
+
+                if not prompt:
+                    raise ValueError("Invalid Prompt.")
+
+                prompt_details.prompt = prompt
+
+            if document_type_id is not None:
+                documenttypeservice = DocumentTypeService()
+
+                if not documenttypeservice.check_document_type_id_exists(
+                    session,
+                    document_type_id
+                ):
+                    raise ValueError("Invalid Document Type ID.")
+
+                existing_prompt = session.scalar(
+                    select(Prompt).where(
+                        Prompt.document_type_id == document_type_id,
+                        Prompt.prompt_id != prompt_id
+                    )
+                )
+
+                if existing_prompt:
+                    raise ValueError(
+                        f"Document type already linked to "
+                        f"{existing_prompt.prompt_name}."
+                    )
+
+                prompt_details.document_type_id = document_type_id
+
             session.commit()
             session.refresh(prompt_details)
+
             return prompt_details
+
         except Exception:
             session.rollback()
             raise
+
         finally:
             session.close()
-
-    def update_document_type_id(self,document_type_id:UUID,prompt_id:UUID)->Prompt:
-            documenttypeservice=DocumentTypeService()
-            
-            if not prompt_id:
-                raise ValueError("Invalid Prompt ID.")
-            
-            if not document_type_id:
-                raise ValueError("Invalid Document Type ID.")
-            
-            session:Session=SessionLocal()
-            try:
-                if not documenttypeservice.check_document_type_id_exists(session,document_type_id):
-                    raise ValueError("Invalid Document Type ID.")
-
-                existing_prompt=session.scalar(
-                    select(Prompt).where(Prompt.document_type_id==document_type_id)
-                )
-                if existing_prompt:
-                    raise ValueError(f"Document type already linked to {existing_prompt.prompt_name}.")
-                
-                prompt_details=session.scalar(
-                    select(Prompt).where(Prompt.prompt_id==prompt_id)
-                )
-
-                if not prompt_details:
-                    raise ValueError("Given Prompt ID does not exist.")
-                
-                prompt_details.document_type_id=document_type_id
-                session.commit()
-                session.refresh(prompt_details)
-                return prompt_details
-            except Exception:
-                session.rollback()
-                raise
-            finally:
-                session.close()
-
-        
-
-
-

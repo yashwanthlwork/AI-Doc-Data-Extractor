@@ -7,10 +7,7 @@ import uuid
 class DocumentType(Base):
     __tablename__="DocumentTypes"
 
-    document_type_id: Mapped[uuid.UUID] = mapped_column(
-    Uuid,
-    primary_key=True,
-    server_default=text("gen_random_uuid()"))
+    document_type_id: Mapped[uuid.UUID] = mapped_column(Uuid,primary_key=True,server_default=text("gen_random_uuid()"))
     document_type_name:Mapped[str]=mapped_column(Text,unique=True)
     description: Mapped[str] = mapped_column(Text)
     create_date: Mapped[datetime] = mapped_column(DateTime,server_default=func.now())

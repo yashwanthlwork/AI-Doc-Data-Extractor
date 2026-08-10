@@ -48,6 +48,8 @@ class DocumentDataExtractionService:
 
             extracted_data=ollama_service.extract_data(prompt_details.prompt,markdown_pages)
 
+            print(f"RAW LLM RESPONSE:{extracted_data}")
+
             document.extracted_data = extracted_data
 
             document.process_stage = "DATA_EXTRACTED"

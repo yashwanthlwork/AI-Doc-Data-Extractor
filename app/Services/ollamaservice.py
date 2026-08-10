@@ -4,10 +4,11 @@ from sqlalchemy import select
 from app.DBModels.document_type import DocumentType
 import json
 from typing import Any
+import time
 
 class OllamaService:
     def __init__(self):
-        self.model = "gemma3:4b"
+        self.model = "qwen2.5:7b-instruct"
         self.client = Client()
 
     def _load_markdown_prompt(self):
@@ -78,6 +79,8 @@ class OllamaService:
         rules = self._load_document_extraction_rules()
         for page_markdown, page_number in markdown_pages:
             final_prompt = f"""
+                 /no_think
+
                 {extraction_prompt}
 
                 {rules}
@@ -91,10 +94,16 @@ class OllamaService:
                 Current Page Markdown:
                 {page_markdown}
                 """
+            extraction_schema = "json"
+
+            start = time.time()
 
             response = self.client.chat(
                 model=self.model,
-                format="json",
+                format=extraction_schema,
+                options={
+                    "temperature": 0
+                },
                 messages=[
                     {
                         "role": "user",
@@ -102,6 +111,16 @@ class OllamaService:
                     }
                 ]
             )
+
+            print(f"LLM extraction took: {time.time() - start:.2f} seconds")
+
+            print("\n========== FINAL PROMPT ==========")
+            print(final_prompt)
+            print("========== END PROMPT ==========\n")
+
+            print("\n========== RAW RESPONSE ==========")
+            print(response.message.content)
+            print("========== END RESPONSE ==========\n")
 
             try:
                 content = self._clean_json_response(response.message.content)
