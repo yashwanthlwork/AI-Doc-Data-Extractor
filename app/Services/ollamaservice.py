@@ -1,4 +1,5 @@
 from ollama import Client
+from app.Configuration.Config import OLLAMA_BASE_URL
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 from app.DBModels.document_type import DocumentType
@@ -8,8 +9,9 @@ import time
 
 class OllamaService:
     def __init__(self):
-        self.model = "qwen2.5:7b-instruct"
-        self.client = Client()
+        self.vision_model = "gemma3:4b"
+        self.text_model = "qwen2.5:7b-instruct"
+        self.client = Client(host=OLLAMA_BASE_URL)
 
     def _load_markdown_prompt(self):
         with open("app/Prompts/markdown_extraction.txt", "r") as file:
@@ -30,7 +32,7 @@ class OllamaService:
     def extract_markdown(self, page_png: bytes):
         prompt = self._load_markdown_prompt()
         response = self.client.chat(
-            model=self.model,
+            model=self.vision_model,
             messages=[
                 {
                     "role": "user",
@@ -61,7 +63,7 @@ class OllamaService:
         )
 
         response = self.client.chat(
-            model=self.model,
+            model=self.text_model,
             messages=[
                 {
                     "role": "user",
@@ -99,7 +101,7 @@ class OllamaService:
             start = time.time()
 
             response = self.client.chat(
-                model=self.model,
+                model=self.text_model,
                 format=extraction_schema,
                 options={
                     "temperature": 0
