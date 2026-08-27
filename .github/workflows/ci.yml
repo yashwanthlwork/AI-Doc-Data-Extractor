@@ -39,3 +39,8 @@ jobs:
               username: ${{ github.actor }}
               password: ${{ secrets.GITHUB_TOKEN }}
 
+          - name: Push Docker image
+            run: |
+              docker tag ai-document-intelligence:latest ghcr.io/${{ github.repository_owner }}/ai-document-intelligence:latest
+              docker push ghcr.io/${{ github.repository_owner }}/ai-document-intelligence:latest
+
