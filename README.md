@@ -248,7 +248,7 @@ When running the application directly on the host machine, both PostgreSQL and O
 ## 1. Clone the repository
 
 ```bash
-git clone https://github.com/<your-github-username>/Python_AI_DOC_INTELLIGENCE.git
+git clone https://github.com/yashwanthlwork/AI-Document-Intelligence-API.git
 
 cd Python_AI_DOC_INTELLIGENCE
 ```
